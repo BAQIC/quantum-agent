@@ -1,6 +1,5 @@
 use reqwest::Response;
 use serde::Deserialize;
-use serde_json::Value;
 
 #[derive(Deserialize, Debug)]
 pub enum AgentType {
