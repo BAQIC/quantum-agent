@@ -1,3 +1,4 @@
+use reqwest::Response;
 use serde::Deserialize;
 use serde_json::Value;
 
@@ -32,7 +33,7 @@ async fn submit_qpp(
     code: &str,
     shots: usize,
     backend: &str,
-) -> Result<Value, reqwest::Error> {
+) -> Result<Response, reqwest::Error> {
     let body = [
         ("qasm", code.to_string()),
         ("shots", shots.to_string()),
@@ -44,20 +45,18 @@ async fn submit_qpp(
         .form(&body)
         .send()
         .await
-        .unwrap()
-        .json::<Value>()
-        .await
 }
 
-async fn submit_qasmsim(address: &str, code: &str, shots: usize) -> Result<Value, reqwest::Error> {
+async fn submit_qasmsim(
+    address: &str,
+    code: &str,
+    shots: usize,
+) -> Result<Response, reqwest::Error> {
     let body = [("qasm", code.to_string()), ("shots", shots.to_string())];
     reqwest::Client::new()
         .post(address)
         .form(&body)
         .send()
-        .await
-        .unwrap()
-        .json::<Value>()
         .await
 }
 
@@ -66,7 +65,7 @@ pub async fn run(
     shots: usize,
     agent: AgentType,
     agent_address: &AgentAddress,
-) -> Result<Value, reqwest::Error> {
+) -> Result<Response, reqwest::Error> {
     match agent {
         AgentType::QppSV => submit_qpp(&agent_address.qpp_agent, code, shots, "sv").await,
         AgentType::QppDM => submit_qpp(&agent_address.qpp_agent, code, shots, "dm").await,

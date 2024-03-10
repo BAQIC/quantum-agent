@@ -29,7 +29,14 @@ pub async fn consume_task(
     let shots = message.shots;
 
     match agent::run(&code, shots, message.agent, agent).await {
-        Ok(result) => (StatusCode::OK, Json(result)),
+        Ok(response) if response.status() == reqwest::StatusCode::OK => (
+            StatusCode::OK,
+            Json(response.json::<Value>().await.unwrap()),
+        ),
+        Ok(response) => (
+            StatusCode::BAD_REQUEST,
+            Json(response.json::<Value>().await.unwrap()),
+        ),
         Err(err) => (
             StatusCode::BAD_REQUEST,
             Json(json!({"Error": format!("{}", err)})),
