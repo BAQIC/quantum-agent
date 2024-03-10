@@ -7,4 +7,4 @@ RUN git clone https://github.com/BAQIC/quantum-agent.git
 
 WORKDIR /workspace/quantum-agent
 
-ENTRYPOINT [ "sh" ]
+ENTRYPOINT [ "cargo", "run" ]
