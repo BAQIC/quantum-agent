@@ -28,9 +28,9 @@ jobs:
       matrix:
         include:
           - dockerfile: ./Dockerfile
-            image:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            image:  ghcr.io/baqic/quantum-agent
           - dockerfile: ./Dockerfile.dev
-            image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-dev
+            image: ghcr.io/baqic/quantum-agent-dev
     permissions:
       contents: read
       packages: write
